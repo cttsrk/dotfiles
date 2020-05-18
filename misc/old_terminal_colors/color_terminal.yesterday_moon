@@ -1,0 +1,117 @@
+#!/bin/bash
+# CTTSRK's terminal colors
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# lives @ github.com/cttsrk/dotfiles
+#
+# Set fancy terminal colors using ANSI escape sequences.
+#
+# Built on Base16 shellscript template: github.com/chriskempson/base16-shell
+
+# Colors based on Tomorrow Night Eighties by: github.com/chriskempson
+color00="2d/2d/2d"  # Base 00   Gradient 0  Black
+color01="f2/77/7a"  # Base 08   Red
+color02="99/cc/99"  # Base 0B   Green
+color03="ff/cc/66"  # Base 0A   Yellow
+color04="66/99/cc"  # Base 0D   Blue
+color05="cc/99/cc"  # Base 0E   Purple
+color06="66/cc/cc"  # Base 0C   Cyan    
+color07="cc/cc/cc"  # Base 05   Gradient 5  White
+color08="99/99/99"  # Base 03   Gradient 3  Bright Black
+color09=$color01
+color10=$color02
+color11=$color03
+color12=$color04
+color13=$color05
+color14=$color06
+color15="ff/ff/ff" # Base 07    Gradient 7  Bright White
+color16="f9/91/57" # Base 09    Orange
+color17="a3/68/5a" # Base 0F    Brown
+color18="35/35/35" # Base 01    Gradient 1
+color19="79/79/79" # Base 02    Gradient 2
+color20="b4/b7/b4" # Base 04    Gradient 4
+color21="e0/e0/e0" # Base 06    Gradient 6
+color_foreground=$color07
+color_background=$color00
+
+if [[ $(command uname -r) =~ Microsoft ]]; then
+    # HACK: If we are on WSL, assume the terminal emulator is cmd.exe and
+    # compensate accordingly. Cmd.exe circa 2018 supports 256color and
+    # truecolor, but fails when you ask it with ansi codes to modify indexed
+    # colors >= 16. It also doesn't seem to support ANSI bold. Put the extra six
+    # Base16 colors in the 09-14 "bold" range instead and strip bold codes from
+    # LS_COLORS and LSCOLORS. Put companion hacks in vimrc and tmux.conf.
+    # See github.com/microsoft/Terminal/issues/313 for more info.
+    color9=$color16
+    color10=$color18
+    color11=$color19
+    color12=$color20
+    color13=$color17
+    color14=$color21
+    # Strip ANSI bold codes from colored ls on gnu systems. We shouldn't touch
+    # "30;01" and "37;01", but dircolor does not seem to use them in $LS_COLORS,
+    # so just strip 01 indiscriminately.
+    LS_COLORS=${LS_COLORS//01;/}
+    LS_COLORS=${LS_COLORS//;01/}
+fi
+
+# Build custom functions depending on the shell.
+if [ -n "$TMUX" ]; then
+    # Tell tmux to pass the escape sequences through. More info:
+    # http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324
+    put_tmplt(){ printf '\033Ptmux;\033\033]4;%d;rgb:%s\033\033\\\033\\' $@; }
+    put_tmplt_var(){ printf '\033Ptmux;\033\033]%d;rgb:%s\033\033\\\033\\' $@; }
+    put_tmplt_custom(){ printf '\033Ptmux;\033\033]%s%s\033\033\\\033\\' $@; }
+elif [ "${TERM%%[-.]*}" = "screen" ]; then
+    # GNU screen (screen, screen-256color, screen-256color-bce)
+    put_tmplt(){ printf '\033P\033]4;%d;rgb:%s\007\033\\' $@; }
+    put_tmplt_var(){ printf '\033P\033]%d;rgb:%s\007\033\\' $@; }
+    put_tmplt_custom(){ printf '\033P\033]%s%s\007\033\\' $@; }
+elif [ "${TERM%%-*}" = "linux" ]; then
+    put_tmplt(){
+        [ $1 -lt 16 ] && printf "\e]P%x%s" $1 $(echo $2 | sed 's/\///g')
+    }
+    put_tmplt_var(){ true; }
+    put_tmplt_custom(){ true; }
+else
+    put_tmplt(){ printf '\033]4;%d;rgb:%s\033\\' $@; }
+    put_tmplt_var(){ printf '\033]%d;rgb:%s\033\\' $@; }
+    put_tmplt_custom(){ printf '\033]%s%s\033\\' $@; }
+fi
+
+# 16 color space.
+put_tmplt 0  $color00
+put_tmplt 1  $color01
+put_tmplt 2  $color02
+put_tmplt 3  $color03
+put_tmplt 4  $color04
+put_tmplt 5  $color05
+put_tmplt 6  $color06
+put_tmplt 7  $color07
+put_tmplt 8  $color08
+put_tmplt 9  $color09
+put_tmplt 10 $color10
+put_tmplt 11 $color11
+put_tmplt 12 $color12
+put_tmplt 13 $color13
+put_tmplt 14 $color14
+put_tmplt 15 $color15
+
+# 256 color space.
+put_tmplt 16 $color16
+put_tmplt 17 $color17
+put_tmplt 18 $color18
+put_tmplt 19 $color19
+put_tmplt 20 $color20
+put_tmplt 21 $color21
+
+# Base colors.
+put_tmplt_var 10 $color_foreground
+put_tmplt_var 11 $color_background
+put_tmplt_custom 12 ";7" # cursor (reverse video)
+
+# Cleanup.
+unset -f put_tmplt put_tmplt_var put_tmplt_custom
+unset color_foreground color_background
+unset color00 color01 color02 color03 color04 color05 color06 color07
+unset color08 color09 color10 color11 color12 color13 color14 color15
+unset color16 color17 color18 color19 color20 color21

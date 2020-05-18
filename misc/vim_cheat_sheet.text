@@ -1,0 +1,41 @@
+Writing it is what makes you rememeber, roll your own. :D
+
+Moving around by lines is an anti-pattern in vim.
+Most line jumps are better served by searches or paragraph jumps.
+Because of this, seeing line numbers is useful, but relative line numbers is
+useless at best and counterproductive at worst.
+
+UNMAPPED KEYS TO REDUCE RSI ~~~~~~~~~~~~~
+Backspace       Use Control-H instead
+Home / End      Use 0 / $ instead
+Up / Down       Use linenumbers instead
+Left / Right    Use Ctrl-h / space instead
+Insert          Use i instead
+h / j / k / l   Avoid
+
+MODES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+i	    insert mode
+C-c     normal mode
+
+CHARACTER NAVIGATION ~~~~~~~~~~~~~~~~~~~~
+ctrl-h / space  move left / right
+
+WORD NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~
+b / w   beginning of previous / next word
+B / W   beginning of previous / next space-delimited word
+e / ge  end of current / previous word
+E / gE  end of current / previoun space-delimited word
+
+INLINE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~
+0 / $   beginning / end of line
+^ / g_  first / last non-space character of line
+g0 / g$ beginning / end of wrapped line
+g^ / gm first / last non-space character of wrapped line
+
+LINE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PARAGRAPH NAVIGATION ~~~~~~~~~~~~~~~~~~~~
+
+PAGE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~

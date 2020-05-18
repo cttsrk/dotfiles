@@ -1,0 +1,37 @@
+TOP PRIORITY:
+git
+wget
+curl
+man-db
+neovim
+python
+tmux
+socat
+findutils
+
+OSX:
+kitty
+duck
+brew
+
+WINDOWS:
+wsl
+
+SECONDARY:
+gcal
+rename
+nmap
+mplayer
+lsof
+tree
+shellcheck
+weechat
+strace
+pstree (lives in psmisc on apt)
+watch (lives in procps on apt)
+ncdu
+youtube-dl
+
+BIG PACKAGES:
+vagrant
+virtualbox
