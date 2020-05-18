@@ -21,7 +21,7 @@ alias sudo='sudo '
 alias v='nvim'
 alias vim='echo Use v instead, you creature of habit!'
 
-# Qickly edit of key files.
+# Qickly edit some key files.
 alias aliases='v ~/.dotfiles/bash_aliases'
 alias bashconfig='v ~/.dotfiles/bashrc'
 alias dotconfig='v ~/.dotfiles/install.conf.yaml'
