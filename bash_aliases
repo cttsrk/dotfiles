@@ -29,27 +29,7 @@ alias kittyconfig='v ~/.dotfiles/kitty.conf'
 alias tmuxconfig='v ~/.dotfiles/tmux.conf'
 alias vconfig='v ~/.dotfiles/vimrc'
 alias colorconfig='v ~/.dotfiles/color_terminal'
-
-# Quick reload of key files.
 alias rebash='. ~/.dotfiles/bashrc'
-alias retmux='tmux source-file ~/.tmux.conf >/dev/null 2>&1'
-
-# NVim has no easy remote reload so work a little harder to make it happen.
-# Nvim starts a server by default and makes a socket in "$TMPDIR/nvim??????/0"
-# and uses messagepack for communicating on it.  Craft a custom message with
-# printf and send it to the nvim sockets with 'socat'. The string sent to nvim
-# is '<Esc><Esc>:so ~/.vimrc<cr>', which is supposed to escape insert and/or
-# insert paste mode and tell vim to source the config file.  Since the socket
-# communication has some latency, background the loop iterations with & so we
-# get our prompt back right away. Put the whole thing in a subshell with () so
-# we don't get spammed with "Done."-messages when the backgrounded processes
-# finish.
-alias revim='( for i in $(ls $TMPDIR/nvim*/0 2>/dev/null); do printf
-"\224\0\2\252nvim_input\221\272<Esc><Esc>:so ~/.vimrc<cr>" | socat
-UNIX-CLIENT:$i - >&/dev/null & done)'
-
-# Reload all the configs.
-alias conhup='rebash ; retmux; revim'
 
 # Fallback for when you mess up vimrc.
 alias novim='vim -u NONE' 

@@ -98,14 +98,6 @@ put_tmplt 13 $color13
 put_tmplt 14 $color14
 put_tmplt 15 $color15
 
-# 256 color space.
-put_tmplt 16 $color16
-put_tmplt 17 $color17
-put_tmplt 18 $color18
-put_tmplt 19 $color19
-put_tmplt 20 $color20
-put_tmplt 21 $color21
-
 # Base colors.
 put_tmplt_var 10 $color_foreground
 put_tmplt_var 11 $color_background
