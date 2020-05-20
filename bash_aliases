@@ -1,6 +1,5 @@
 # Tool for conditionalizing platform-specific aliases.
 # Usage: 'if_ostype gnu && command', 'if_ostype bsd'... etc.
-# Only needed for aliases that conflict between platforms.
 function if_ostype {
     case $OSTYPE in
         *linux*|*hurd*|*msys*|*cygwin*|*sua*|*interix*)     s="gnu";;
@@ -42,18 +41,11 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# Directory tree inspection.
+# Misc
 alias treepager='_(){ tree -C $* | less -r; }; _'
-
-# Create dir and change to it.
 alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
-
-# Download files from github.
 alias blobget='_(){ wget ${*/blob/raw}; }; _'
-
-# Misc media stuff.
-alias bestaudio="youtube-dl -f bestaudio -x -o '%(artist)s - %(release_year)s - %(track)s - %(id)s.%(ext)stoconvert'"
-alias music='mplayer -novideo'
+alias bestaudio="youtube-dl -f bestaudio -x -o '%(artist)s - %(release_year)s - %(track)s - %(id)s.%(ext)sTMP'"
 alias dumpaudio='_(){ mplayer -ao pcm:file="$1.wav" -vo null "$1"; }; _'
 
 # Dvorak typing helpers.
@@ -70,7 +62,6 @@ alias la='ll -a'
 alias rm='rm -v'
 alias cp='cp -v'
 alias mv='mv -v'
-alias h='history'
 alias j='jobs -l'
 alias grep='grep --color=auto'
 
@@ -86,6 +77,8 @@ alias free='free -h'
 # NOTE: -T and -t are switched for gnu 'df' and bsd 'df'...
 if_ostype gnu && alias df='df -kTh'
 if_ostype bsd && alias df='df -kth'
+
+if_os osx && echo '--start-as=fullscreen' > ~/.config/kitty/macos-launch-services-cmdline
 
 # Microsoft WSL-specific aliases.
 if [[ $(uname -r) =~ Microsoft$ ]]; then
