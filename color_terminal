@@ -32,7 +32,7 @@ color11="9a/9a/8a"  # content4        bright yellow -> medium4
 color07="ea/e4/be"  # highlight1      White -> bright1
 color15="ff/f7/e2"  # highlight2      bright white -> bright2
 
-color03="ba/8f/10"  # Yellow -> Yellow
+color03="ba/9f/40"  # Yellow -> Yellow
 # color09="c3/31/00"  # bright red -> Orange
 # color01="d6/15/11"  # Red -> Red
 color10="aa/ee/aa"  # bright green -> bright green

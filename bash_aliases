@@ -1,6 +1,6 @@
 # Tool for conditionalizing platform-specific aliases.
 # Usage: 'if_ostype gnu && command', 'if_ostype bsd'... etc.
-# Only needed for aliases that confligt between platforms.
+# Only needed for aliases that conflict between platforms.
 function if_ostype {
     case $OSTYPE in
         *linux*|*hurd*|*msys*|*cygwin*|*sua*|*interix*)     s="gnu";;
