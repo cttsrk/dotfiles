@@ -42,11 +42,11 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
 # Misc
-alias treepager='_(){ tree -C $* | less -r; }; _'
-alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
-alias blobget='_(){ wget ${*/blob/raw}; }; _'
+alias treepager='treepager(){ tree -C $* | less -r; }; treepager'
+alias mkcd='mkcd(){ mkdir -p $1; cd $1; }; mkcd'
+alias blobget='blobget(){ wget ${*/blob/raw}; }; blobget'
 alias bestaudio="youtube-dl -f bestaudio -x -o '%(artist)s - %(release_year)s - %(track)s - %(id)s.%(ext)sTMP'"
-alias dumpaudio='_(){ mplayer -ao pcm:file="$1.wav" -vo null "$1"; }; _'
+alias dumpaudio='dumpaudio(){ mplayer -ao pcm:file="$1.wav" -vo null "$1"; }; dumpaudio'
 
 # Dvorak typing helpers.
 alias th='ls' # ls is wicked hard to type on dvorak

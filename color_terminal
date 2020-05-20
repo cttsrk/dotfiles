@@ -26,8 +26,8 @@ color02="6c/9f/29"  # Green ->          Green           32
 foreground=$color11
 background=$color00
 
-# Different environments need slightly different functions for performing the
-# changes. Yoinked from github.com/chriskempson/base16 .
+# Build environment-appropriate functions for performing the changes. Yoinked
+# from github.com/chriskempson/base16 .
 if [ -n "$TMUX" ]; then
     # Tell tmux to pass the escape sequences through. More info:
     # http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324
