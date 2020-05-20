@@ -4,58 +4,30 @@
 #
 # Set fancy terminal colors using ANSI escape sequences.
 
-# term  ansi    color           intent
-# ===========================================
-# 00	30      black           background1
-# 01	31      red             red
-# 02	32      green           green
-# 03	33      yellow          yellow
-# 04	34      blue            background2
-# 05	35      magenta         magenta
-# 06    36      cyan            cyan
-# 07    37      white           highlight1
-# 08    90      bright black    content1 
-# 09    91      bright red      orange 
-# 10    92      bright green    content2
-# 11    93      bright yellow   content4
-# 12    94      bright blue     blue
-# 13    95      bright magenta  purple
-# 14    96      bright cyan     content3
-# 15    97      bright white    highlight2
+# term = rgb hex      default color     intent          ANSI
+# ===========================================================
+color00="05/15/1f"  # Black ->          background1     30
+color04="09/1e/28"  # Blue ->           background2     34
+color08="23/3c/43"  # bright black ->   content1        90
+color09="4f/68/71"  # bright red ->     content2        91
+color14="71/84/86"  # bright cyan ->    content3        96
+color11="9a/9a/8a"  # bright yellow ->  content4        93
+color07="ea/e4/be"  # White ->          highlight1      37
+color15="ff/f7/e2"  # bright white ->   highlight2      97
+color10="aa/ee/aa"  # bright green ->   lime            92
+color03="ba/9f/40"  # Yellow ->         Yellow          33
+color01="c3/31/00"  # Red ->            orange          31
+color05="cc/19/70"  # Magenta ->        Magenta         35
+color13="57/5c/bb"  # bright magenta -> bright purple   95
+color12="9a/bb/d6"  # bright blue ->    bright blue     94
+color06="5c/d3/a9"  # Cyan ->           Cyan            36
+color02="6c/9f/29"  # Green ->          Green           32
 
-color00="05/15/1f"  # background1     Black -> dark1
-color04="09/1e/28"  # background2     Blue -> dark2
-color08="23/3c/43"  # content1        bright black -> medium1
-color09="4f/68/71"  # content2        bright red -> medium2
-color14="71/84/86"  # content3        bright cyan -> medium3
-color11="9a/9a/8a"  # content4        bright yellow -> medium4
-color07="ea/e4/be"  # highlight1      White -> bright1
-color15="ff/f7/e2"  # highlight2      bright white -> bright2
+foreground=$color11
+background=$color00
 
-color03="ba/9f/40"  # Yellow -> Yellow
-# color09="c3/31/00"  # bright red -> Orange
-# color01="d6/15/11"  # Red -> Red
-color10="aa/ee/aa"  # bright green -> bright green
-color01="c3/31/00"  # Red -> Orange
-color05="cc/19/70"  # Magenta -> Magenta
-color13="57/5c/bb"  # bright magenta -> Purple
-# color12="07/7a/cb"  # bright blue -> Blue
-color12="9a/bb/d6"  # bright blue -> Blue
-color06="5c/d3/a9"  # Cyan -> Cyan    
-color02="6c/9f/29"  # Green -> Green
-
-color_foreground=$color11
-color_background=$color00
-
-if [[ $(command uname -r) =~ Microsoft ]]; then
-    # Strip ANSI bold codes from colored ls on gnu systems. We shouldn't touch
-    # "30;01" and "37;01", but dircolor does not seem to use them in $LS_COLORS,
-    # so just strip 01 indiscriminately.
-    LS_COLORS=${LS_COLORS//01;/}
-    LS_COLORS=${LS_COLORS//;01/}
-fi
-
-# Build custom functions depending on the shell.
+# Build custom functions for different enviroments.
+# Yoinked from github.com/chriskempson/base16
 if [ -n "$TMUX" ]; then
     # Tell tmux to pass the escape sequences through. More info:
     # http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324
@@ -68,9 +40,7 @@ elif [ "${TERM%%[-.]*}" = "screen" ]; then
     put_tmplt_var(){ printf '\033P\033]%d;rgb:%s\007\033\\' $@; }
     put_tmplt_custom(){ printf '\033P\033]%s%s\007\033\\' $@; }
 elif [ "${TERM%%-*}" = "linux" ]; then
-    put_tmplt(){
-        [ $1 -lt 16 ] && printf "\e]P%x%s" $1 $(echo $2 | sed 's/\///g')
-    }
+    put_tmplt(){ [ $1 -lt 16 ] && printf "\e]P%x%s" $1 $(echo $2|sed 's/\///g') }
     put_tmplt_var(){ true; }
     put_tmplt_custom(){ true; }
 else
@@ -79,7 +49,7 @@ else
     put_tmplt_custom(){ printf '\033]%s%s\033\\' $@; }
 fi
 
-# 16 color space.
+# Let's do it!
 put_tmplt 0  $color00
 put_tmplt 1  $color01
 put_tmplt 2  $color02
@@ -96,15 +66,11 @@ put_tmplt 12 $color12
 put_tmplt 13 $color13
 put_tmplt 14 $color14
 put_tmplt 15 $color15
-
-# Base colors.
-put_tmplt_var 10 $color_foreground
-put_tmplt_var 11 $color_background
-put_tmplt_custom 12 ";7" # cursor (reverse video)
+put_tmplt_var 10 $foreground
+put_tmplt_var 11 $background
+put_tmplt_custom 12 ";7" # reverse video cursor
 
 # Cleanup.
-unset -f put_tmplt put_tmplt_var put_tmplt_custom
-unset color_foreground color_background
+unset -f put_tmplt put_tmplt_var put_tmplt_custom foreground background
 unset color00 color01 color02 color03 color04 color05 color06 color07
 unset color08 color09 color10 color11 color12 color13 color14 color15
-unset color16 color17 color18 color19 color20 color21
