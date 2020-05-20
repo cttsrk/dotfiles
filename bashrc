@@ -4,17 +4,10 @@ case $- in *i*) ;; *) return;; esac
 # Check the window size after each command and update LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Enable colored ls. This sets the $LS_COLORS environment variable for gnu 'ls'.
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" ||
-    eval "$(dircolors -b)"
-fi
-
 # Use a separate file for aliases.
 if [ -f ~/.dotfiles/bash_aliases ]; then . ~/.dotfiles/bash_aliases; fi
 
-# HISTORY
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# Save a lot of bash history but no doubles.
 HISTCONTROL=ignoreboth
 shopt -s histappend
 HISTSIZE=1000
@@ -29,34 +22,31 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# Enable preview when doing history expansion by hitting space.
+# History expansion preview when you hit space.
 bind Space:magic-space
 
-
-# COLORS
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-
-# Do we have colors settings?
+# Use a color theme for the terminal.
 if [ -f ~/.dotfiles/color_terminal ]; then
     . ~/.dotfiles/color_terminal
 fi
 
-# Do we want to try to force a color prompt?
-force_color_prompt=yes
+# Colors for BSD ls.
+export LSCOLORS='dxgxfxdacxdadahbadacdc'
 
-# Test if we can force a color prompt.
+# Colors for GNU ls and all versions of tree.
+export LS_COLORS='rs=0:di=95:ln=36:mh=00:pi=40;33:so=35:do=35:bd=40;33:cd=40;33:or=40;31:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=32:*.tar=31:*.tgz=31:*.zip=31:*.gz=31:*.bz2=31:*.bz=31:*.tbz=31:*.tbz2=31:*.deb=31:*.rpm=31:*.rar=31:*.cpio=31:*.7z=31:*.cab=31:*.jpg=35:*.jpeg=35:*.gif=35:*.tga=35:*.tif=35:*.tiff=35:*.png=35:*.svg=35:*.svgz=35:*.mov=35:*.mpg=35:*.mpeg=35:*.m2v=35:*.mkv=35:*.webm=35:*.mp4=35:*.m4v=35:*.vob=35:*.wmv=35:*.avi=35:*.flac=00;36:*.m4a=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.wav=00;36:*.opus=00;36:';
+
+# Force a color prompt if possible.
+force_color_prompt=yes
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
         color_prompt=yes
     else
         color_prompt=
     fi
 fi
 
-# Set the color prompt using ASCII escape sequences for color.
+# Set the color prompt using ANSI escape sequences.
 if [ "$color_prompt" = yes ]; then
     PS1="\[\e[32m\]\u@\h \[\e[33m\]\w/\[\e[00m\] "
 else
@@ -64,7 +54,7 @@ else
 fi
 unset color_prompt force_color_prompt
 
-# If we are in Tmux, prepend the prompt with an ASCII escape sequence that
+# If we are in Tmux, prepend the prompt with an ANSI escape sequence that
 # changes the title of the current window.
 if [ "${TMUX_PANE}" ]; then
     # PS1 updates the title with the current working directory (CWD) after each 

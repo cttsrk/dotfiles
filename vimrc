@@ -100,7 +100,7 @@ syntax reset
 let s:bg1   = "0"
 let s:bg2   = "4"
 let s:cont1 = "8"
-let s:cont2 = "10"
+let s:cont2 = "9"
 let s:cont3 = "14"
 let s:cont4 = "11"
 let s:hi1   = "7"
@@ -115,7 +115,7 @@ let s:yellow = "3"
 let s:blue   = "12"
 let s:purple = "13"
 let s:cyan   = "6"
-let s:lime   = "9"
+let s:lime   = "10"
 let s:magenta  = "5"
 
 " Build an appropriate highlight command and run it. The "NONE" before the

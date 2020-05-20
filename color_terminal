@@ -3,7 +3,6 @@
 # lives @ github.com/cttsrk/dotfiles
 #
 # Set fancy terminal colors using ANSI escape sequences.
-#
 
 # term  ansi    color           intent
 # ===========================================
@@ -27,7 +26,7 @@
 color00="05/15/1f"  # background1     Black -> dark1
 color04="09/1e/28"  # background2     Blue -> dark2
 color08="23/3c/43"  # content1        bright black -> medium1
-color10="4f/68/71"  # content2        bright green -> medium2
+color09="4f/68/71"  # content2        bright red -> medium2
 color14="71/84/86"  # content3        bright cyan -> medium3
 color11="9a/9a/8a"  # content4        bright yellow -> medium4
 color07="ea/e4/be"  # highlight1      White -> bright1
@@ -36,7 +35,7 @@ color15="ff/f7/e2"  # highlight2      bright white -> bright2
 color03="ba/8f/10"  # Yellow -> Yellow
 # color09="c3/31/00"  # bright red -> Orange
 # color01="d6/15/11"  # Red -> Red
-color09="aa/ee/aa"  # bright red -> bright green
+color10="aa/ee/aa"  # bright green -> bright green
 color01="c3/31/00"  # Red -> Orange
 color05="cc/19/70"  # Magenta -> Magenta
 color13="57/5c/bb"  # bright magenta -> Purple

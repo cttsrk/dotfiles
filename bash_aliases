@@ -1,5 +1,6 @@
 # Tool for conditionalizing platform-specific aliases.
 # Usage: 'if_ostype gnu && command', 'if_ostype bsd'... etc.
+# Only needed for aliases that confligt between platforms.
 function if_ostype {
     case $OSTYPE in
         *linux*|*hurd*|*msys*|*cygwin*|*sua*|*interix*)     s="gnu";;
@@ -23,20 +24,19 @@ alias vim='echo Use v instead, you creature of habit!'
 
 # Qickly edit some key files.
 alias aliases='v ~/.dotfiles/bash_aliases'
-alias bashconfig='v ~/.dotfiles/bashrc'
-alias dotconfig='v ~/.dotfiles/install.conf.yaml'
-alias kittyconfig='v ~/.dotfiles/kitty.conf'
-alias tmuxconfig='v ~/.dotfiles/tmux.conf'
-alias vconfig='v ~/.dotfiles/vimrc'
-alias colorconfig='v ~/.dotfiles/color_terminal'
+alias bashconf='v ~/.dotfiles/bashrc'
+alias dotconf='v ~/.dotfiles/install.conf.yaml'
+alias kittyconf='v ~/.dotfiles/kitty.conf'
+alias tmuxconf='v ~/.dotfiles/tmux.conf'
+alias vconf='v ~/.dotfiles/vimrc'
+alias colorconf='v ~/.dotfiles/color_terminal'
 alias rebash='. ~/.dotfiles/bashrc'
 
-# Fallback for when you mess up vimrc.
+# Fallback in case of a broken vim config.
 alias novim='vim -u NONE' 
 alias novimconfig='vim -u NONE ~/.vimrc'
 
 # Fast directory change.
-alias home='cd ~'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -44,7 +44,6 @@ alias .....='cd ../../../..'
 
 # Directory tree inspection.
 alias treepager='_(){ tree -C $* | less -r; }; _'
-alias ftreepager='_(){ tree -shfC $* | prettyprint.awk | less -r; }; _'
 
 # Create dir and change to it.
 alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
@@ -52,11 +51,8 @@ alias mkcd='_(){ mkdir -p $1; cd $1; }; _'
 # Download files from github.
 alias blobget='_(){ wget ${*/blob/raw}; }; _'
 
-# Download music from youtube.
-alias bestaudio="youtube-dl -f bestaudio -x -o '%(track)s - %(artist)s - %(release_year)s - %(id)s.%(ext)stoconvert'"
-#alias bestaudio="youtube-dl -f bestaudio -x -o '%(artist)s - %(release_year)s - %(track)s - %(id)s.%(ext)s'"
-
 # Misc media stuff.
+alias bestaudio="youtube-dl -f bestaudio -x -o '%(artist)s - %(release_year)s - %(track)s - %(id)s.%(ext)stoconvert'"
 alias music='mplayer -novideo'
 alias dumpaudio='_(){ mplayer -ao pcm:file="$1.wav" -vo null "$1"; }; _'
 
@@ -64,11 +60,6 @@ alias dumpaudio='_(){ mplayer -ao pcm:file="$1.wav" -vo null "$1"; }; _'
 alias th='ls' # ls is wicked hard to type on dvorak
 alias eu='cd' # and cd is on the wrong side of the keyboard
 alias pager='less' # four left pinky strikes in 'less'+<Enter>...
-
-# Set the $LSCOLORS environment variable for bsd 'ls'. This approximates the
-# dircolors defaults from above, sans 'bold' settings (MacOS renders fonts
-# plenty fat without).
-if_ostype bsd && export LSCOLORS='dxgxfxdacxdadahbadacec'
 
 # Colored ls has different syntax on different platforms.
 if_ostype gnu && alias ls='ls --color=auto'
@@ -83,12 +74,6 @@ alias h='history'
 alias j='jobs -l'
 alias grep='grep --color=auto'
 
-# REALLY fancy ls. TODO: Maybe decrease coupling by inlining the awk script as
-# a function?
-alias pp='CLICOLOR_FORCE=true ls | prettyprint.awk'
-alias pl='CLICOLOR_FORCE=true ll | prettyprint.awk'
-alias pa='CLICOLOR_FORCE=true la | prettyprint.awk'
-
 # Prettyprint the path environment variable.
 alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
@@ -98,7 +83,7 @@ alias du='du -ckhx'
 alias dudir='du -s *'
 alias free='free -h'
 
-# Gotcha: -T and -t are switched for gnu 'df' and bsd 'df'...
+# NOTE: -T and -t are switched for gnu 'df' and bsd 'df'...
 if_ostype gnu && alias df='df -kTh'
 if_ostype bsd && alias df='df -kth'
 
