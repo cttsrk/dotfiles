@@ -1,7 +1,7 @@
 set nocompatible        " Don't care to be compatible with vi circa 1976.
 
 " Quickly edit and reload this file from anywhere.
-cabbrev vimcon vert new ~/.vimrc
+cabbrev vconf vert new ~/.vimrc
 cabbrev rev source ~/.vimrc
 
 set undofile            " Save unlimited per-file undo trees in appdata.
@@ -16,10 +16,10 @@ set splitright splitbelow
 set foldcolumn=0 numberwidth=5
 syntax enable
 
-augroup active_window_background
+augroup buffer_switch_settings
     autocmd!
     autocmd WinLeave * :set colorcolumn=0
-    autocmd BufEnter * :let &l:colorcolumn="".join(range(1,80),",")
+    autocmd BufEnter * :let &colorcolumn="".join(range(1,80),",")
     autocmd BufEnter * :set number
 augroup END
 
@@ -47,12 +47,10 @@ endif
 "Trigger InsertLeave event when exiting insert mode with Control-C
 ino <C-c> <Esc>
 
-" Use Control-C to dehighlight searches. The extra : makes vim shut up about
-" the command we ran and about how to exit vim.
+" Use Control-C to unhighlight searches.
 nn <C-c> :nohlsearch<CR>:<C-c>
 
-" Unbind some keys that encourage suboptimal use patterns like straying from
-" the home row or linewise navigation.
+" Unbind keys that encourage suboptimal use patterns.
 no  <Home>      <Nop>
 no  <End>       <Nop>
 no  <Insert>    <Nop>
@@ -85,10 +83,8 @@ augroup windowtitle
 augroup END
 
 
-" VIM THEME SETTINGS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Does not define colors, only which UI elements use them. The terminal colors
-" are set for us by the shell using "~/.dotfiles/color_terminal".
-
+" VIM THEME SETTINGS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" The terminal colors are set for us by the shell using "~/.dotfiles/color_terminal".
 highlight clear
 syntax reset
 
@@ -142,36 +138,36 @@ call s:hi("VisualNOS",      "",         s:bg1,      "bold,reverse")
 
 " Minor vim user interface highlights.
 "          name             foreground  background  attributes
-call s:hi("Conceal",        s:blue,     "",    "")
-call s:hi("CursorColumn",   "",         s:bg1,    "")
+call s:hi("Conceal",        s:blue,     "",         "")
+call s:hi("CursorColumn",   "",         s:bg1,      "")
 call s:hi("CursorLine",     "",         "",         "underline")
 call s:hi("Directory",      s:blue,     "",         "")
-call s:hi("DiffAdd",        s:green,    s:bg1,    "")
-call s:hi("DiffChange",     s:yellow,   s:bg1,    "")
-call s:hi("DiffDelete",     s:orange,      s:bg1,    "")
-call s:hi("DiffText",       s:blue,     s:bg1,    "")
-call s:hi("ErrorMsg",       s:orange,      "",         "reverse")
+call s:hi("DiffAdd",        s:green,    s:bg1,      "")
+call s:hi("DiffChange",     s:yellow,   s:bg1,      "")
+call s:hi("DiffDelete",     s:orange,   s:bg1,      "")
+call s:hi("DiffText",       s:blue,     s:bg1,      "")
+call s:hi("ErrorMsg",       s:orange,   "",         "reverse")
 call s:hi("IncSearch",      s:orange,   "",         "reverse")
 call s:hi("ModeMsg",        s:blue,     "",         "")
 call s:hi("MoreMsg",        s:blue,     "",         "")
 call s:hi("NonText",        s:purple,   "",         "bold")
-call s:hi("Pmenu",          s:cont3,    s:bg1,    "bold,reverse")
-call s:hi("PmenuSel",       s:cont1,    s:hi1,    "bold,reverse")
-call s:hi("PmenuSbar",      s:hi1,    s:cont3,    "bold,reverse")
-call s:hi("PmenuThumb",     s:cont3,    s:bg2,    "bold,reverse")
+call s:hi("Pmenu",          s:cont3,    s:bg1,      "bold,reverse")
+call s:hi("PmenuSel",       s:cont1,    s:hi1,      "bold,reverse")
+call s:hi("PmenuSbar",      s:hi1,      s:cont3,    "bold,reverse")
+call s:hi("PmenuThumb",     s:cont3,    s:bg2,      "bold,reverse")
 call s:hi("Question",       s:cyan,     "",         "bold")
-call s:hi("SignColumn",     "",         s:bg1,    "")
+call s:hi("SignColumn",     "",         s:bg1,      "")
 call s:hi("SpecialKey",     s:purple,   "",         "bold")
 call s:hi("SpellBad",       "",         "",         "undercurl")
 call s:hi("SpellCap",       "",         "",         "undercurl")
 call s:hi("SpellLocal",     "",         "",         "undercurl")
 call s:hi("SpellRare",      "",         "",         "undercurl")
-call s:hi("TabLine",        s:cont3,    s:bg1,    "reverse")
-call s:hi("TabLineFill",    s:cont3,    s:bg1,    "reverse")
-call s:hi("TabLineSel",     s:cont1,    s:hi1,    "bold,reverse,underline")
+call s:hi("TabLine",        s:cont3,    s:bg1,      "reverse")
+call s:hi("TabLineFill",    s:cont3,    s:bg1,      "reverse")
+call s:hi("TabLineSel",     s:cont1,    s:hi1,      "bold,reverse,underline")
 call s:hi("Title",          s:orange,   "",         "bold")
-call s:hi("WarningMsg",     s:orange,      "",         "bold")
-call s:hi("WildMenu",       s:hi1,    s:bg1,    "bold,reverse")
+call s:hi("WarningMsg",     s:orange,   "",         "bold")
+call s:hi("WildMenu",       s:hi1,      s:bg1,      "bold,reverse")
 hi! link NvimInternalError ErrorMsg
 
 " Common syntax highlights.
@@ -183,32 +179,32 @@ hi! link Character  Constant
 hi! link Float      Constant
 hi! link Number     Constant
 hi! link String     Constant
-call s:hi("Error",          s:orange,      s:bg1,    "bold")
-call s:hi("Identifier",     s:cont4,     "",         "none")
+call s:hi("Error",          s:orange,    s:bg1,     "bold")
+call s:hi("Identifier",     s:cont4,     "",        "none")
 hi! link Function   Identifier
-call s:hi("PreProc",        s:lime,     "",         "")
+call s:hi("PreProc",        s:lime,      "",        "")
 hi! link Define     PreProc
 hi! link Include    PreProc
 hi! link Macro      PreProc
 hi! link PreCondit  PreProc
-call s:hi("Special",        s:lime,      "",         "")
+call s:hi("Special",        s:lime,      "",        "")
 hi! link Debug          Special
 hi! link Delimiter      Special
 hi! link SpecialChar    Special
 hi! link SpecialComment Special
 hi! link Tag            Special
-call s:hi("Statement",      s:hi1,   "",         "")
+call s:hi("Statement",      s:hi1,      "",         "")
 hi! link Conditional  Statement
 hi! link Exception    Statement
 hi! link Keyword      Statement
 hi! link Label        Statement
 hi! link Operator     Statement
 hi! link Repeat       Statement
-call s:hi("Todo",           s:orange,   s:bg1,    "bold")
-call s:hi("Type",           s:blue,   "",         "")
+call s:hi("Todo",           s:orange,   s:bg1,      "bold")
+call s:hi("Type",           s:blue,     "",         "")
 hi! link StorageClass Type
 hi! link Structure    Type
 hi! link TypeDef      Type
-call s:hi("Underlined",     s:magenta,    "",         "")
+call s:hi("Underlined",     s:magenta,  "",         "")
 
 delfunction s:hi        " Cleanup.
