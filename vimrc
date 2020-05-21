@@ -47,8 +47,10 @@ endif
 "Trigger InsertLeave event when exiting insert mode with Control-C
 ino <C-c> <Esc>
 
-" Use Control-C to unhighlight searches.
-nn <C-c> :nohlsearch<CR>:<C-c>
+" Silence Control-C.
+nn <C-c> :<C-c>
+" Use space to unhighlight search matches.
+nn <Space> :nohlsearch<CR>:<C-c><Space>
 
 " Unbind keys that encourage suboptimal use patterns.
 no  <Home>      <Nop>
