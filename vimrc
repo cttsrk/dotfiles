@@ -4,17 +4,22 @@ set nocompatible        " Don't care to be compatible with vi circa 1976.
 cabbrev vconf vert new ~/.vimrc
 cabbrev rev source ~/.vimrc
 
+" Don't fill the fold line with underscores.
+" Don't fill the vertical split separator with pipes.
+" Don't put squiggles after end-of-buffer.
+set fillchars="vert: ,fold: ,eob: "
+
 set undofile            " Save unlimited per-file undo trees in appdata.
 set lazyredraw
 set mouse=a
 set noeb vb t_vb=
-set laststatus=0
-set noruler
+set laststatus=0 noruler
 set hidden
 set scrolloff=3
 set splitright splitbelow
 set foldcolumn=0 numberwidth=5
-syntax enable
+set tabstop=4 shiftwidth=4 expandtab autoindent
+set ignorecase smartcase incsearch
 
 augroup buffer_switch_settings
     autocmd!
@@ -22,17 +27,6 @@ augroup buffer_switch_settings
     autocmd BufEnter * :let &colorcolumn="".join(range(1,80),",")
     autocmd BufEnter * :set number
 augroup END
-
-" Indentation settings
-set tabstop=4 shiftwidth=4 expandtab autoindent
-
-" Search settings
-set ignorecase smartcase incsearch
-
-" Don't fill the fold line with underscores.
-" Don't fill the vertical split separator with pipes.
-" Don't put squiggles after end-of-buffer.
-set fillchars="vert: ,fold: ,eob: "
 
 " Terminal sanity on windows.
 if (&term == "pcterm" || &term == "win32")
@@ -46,12 +40,10 @@ endif
 
 "Trigger InsertLeave event when exiting insert mode with Control-C
 ino <C-c> <Esc>
-
 " Silence Control-C.
 nn <C-c> :<C-c>
 " Use space to unhighlight search matches.
 nn <Space> :nohlsearch<CR>:<C-c><Space>
-
 " Unbind keys that encourage suboptimal use patterns.
 no  <Home>      <Nop>
 no  <End>       <Nop>
@@ -84,13 +76,13 @@ augroup windowtitle
   autocmd BufReadPost,FileReadPost,BufNewFile,BufEnter * call UpdateTitle()
 augroup END
 
-
 " VIM THEME SETTINGS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" The terminal colors are set for us by the shell using "~/.dotfiles/color_terminal".
+" The shell sets the terminal colors in "~/.dotfiles/color_terminal".
 highlight clear
+syntax enable
 syntax reset
 
-"   vim name    
+"   vim name      terminal color number 
 let s:bg1       = "0"
 let s:bg2       = "4"
 let s:cont1     = "8"
