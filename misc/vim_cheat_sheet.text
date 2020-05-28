@@ -5,6 +5,8 @@ Most line jumps are better served by searches or paragraph jumps.
 Because of this, seeing line numbers is useful, but relative line numbers is
 useless at best and counterproductive at worst.
 
+ctrl-o  Perform a normal mode command without exiting insert mode.
+
 UNMAPPED KEYS TO REDUCE RSI ~~~~~~~~~~~~~
 Backspace       Use Control-H instead
 Home / End      Use 0 / $ instead
