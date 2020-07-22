@@ -16,5 +16,11 @@ if [ -z "$TMPDIR" ]; then               # Make sure we have a TMPDIR.
     TMPDIR="/tmp/"
 fi
 
+# If we're not in a tmux pane, attach to the first available tmux session,
+# cor launch one if none exists.
+if [ -z "$TMUX" ]; then
+    tmux attach 0|| tmux
+fi
+
 # FUCK YOU APPLE FOR SERIAL
 export BASH_SILENCE_DEPRECATION_WARNING=1

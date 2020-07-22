@@ -1,30 +1,30 @@
-set nocompatible        " Don't care to be compatible with vi circa 1976.
+" Don't care to be compatible with vi circa 1976.
+set nocompatible
 
 " Quickly edit and reload this file from anywhere.
 cabbrev vconf vert new ~/.vimrc
 cabbrev rev source ~/.vimrc
 
-" Don't fill the fold line with underscores.
-" Don't fill the vertical split separator with pipes.
-" Don't put squiggles after end-of-buffer.
-set fillchars="vert: ,fold: ,eob: "
+" Save unlimited per-file undo history trees in appdata.
+set undofile
 
-set undofile            " Save unlimited per-file undo trees in appdata.
-set lazyredraw
 set mouse=a
+set lazyredraw
 set noeb vb t_vb=
 set laststatus=0 noruler
 set hidden
 set scrolloff=3
 set splitright splitbelow
-set foldcolumn=0 numberwidth=5
+set foldcolumn=0 numberwidth=6
 set tabstop=4 shiftwidth=4 expandtab autoindent
 set ignorecase smartcase incsearch
 
+" Highlight the first 80 columns.
+let &colorcolumn="".join(range(1,80),",")
+
+" Enable line numbers for all opened files, even help files.
 augroup buffer_switch_settings
     autocmd!
-    autocmd WinLeave * :set colorcolumn=0
-    autocmd BufEnter * :let &colorcolumn="".join(range(1,80),",")
     autocmd BufEnter * :set number
 augroup END
 
@@ -40,11 +40,14 @@ endif
 
 "Trigger InsertLeave event when exiting insert mode with Control-C
 ino <C-c> <Esc>
+
 " Silence Control-C.
 nn <C-c> :<C-c>
+
 " Use space to unhighlight search matches.
 nn <Space> :nohlsearch<CR>:<C-c><Space>
-" Unbind keys that encourage suboptimal use patterns.
+
+" Unbind keys that encourage suboptimal use patterns ("vim hardmode").
 no  <Home>      <Nop>
 no  <End>       <Nop>
 no  <Insert>    <Nop>
@@ -66,7 +69,7 @@ no! <Down>      <Nop>
 no! <Left>      <Nop>
 no! <Right>     <Nop>
 
-" Set the title to "filename" in tmux or screen or a terminal emulator.
+" Set the terminal title to "filename".
 function! UpdateTitle()
   let &titlestring="".fnamemodify(expand("%"),":~")
   set title
@@ -76,129 +79,89 @@ augroup windowtitle
   autocmd BufReadPost,FileReadPost,BufNewFile,BufEnter * call UpdateTitle()
 augroup END
 
-" VIM THEME SETTINGS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" The shell sets the terminal colors in "~/.dotfiles/color_terminal".
-highlight clear
-syntax enable
-syntax reset
+" Alias some terminal colors for vim use.
+let s:white     = "15"
+let s:light     = "7"
 
-"   vim name      terminal color number 
-let s:bg1       = "0"
-let s:bg2       = "4"
-let s:cont1     = "8"
-let s:cont2     = "9"
-let s:cont3     = "14"
-let s:cont4     = "11"
-let s:hi1       = "7"
-let s:hi2       = "15"
-let s:orange    = "1"
-let s:green     = "2"
-let s:yellow    = "3"
-let s:blue      = "12"
-let s:purple    = "13"
-let s:cyan      = "6"
-let s:lime      = "10"
-let s:magenta   = "5"
+if (&t_Co == "256")
+    let s:grey1     = "249"
+    let s:grey2     = "246"
+    let s:grey3     = "243"
+    let s:grey4     = "240"
+    let s:dark      = "238"
+    let s:black     = "232"
+    let s:orange    = "166"
+    let s:green     = "70"
+    let s:yellow    = "178"
+    let s:blue      = "25"
+    let s:purple    = "98"
+    let s:cyan      = "37"
+    let s:lime      = "76"
+    let s:magenta   = "164"
+else
+    let s:grey1     = "8"
+    let s:grey2     = "8"
+    let s:grey3     = "8"
+    let s:grey4     = "8"
+    let s:dark      = "0"
+    let s:black     = "0"
+    let s:orange    = "1"
+    let s:green     = "2"
+    let s:yellow    = "3"
+    let s:blue      = "4"
+    let s:purple    = "5"
+    let s:cyan      = "6"
+    let s:lime      = "10"
+    let s:magenta   = "13"
+endif
 
-" Build an appropriate highlight command and run it. The "NONE" before the
-" variables clears the highlight completely without reverting to default.
+" Build an appropriate highlight command. The "NONE" before the variables
+" clears the highlight completely without reverting to default.
 function s:hi(group, fg, bg, attr)
-  let s:c = "highlight! " .a:group ." NONE"
-  if a:fg != ""   | let s:c .= " ctermfg=" .a:fg | endif
-  if a:bg != ""   | let s:c .= " ctermbg=" .a:bg | endif
-  if a:attr != "" | let s:c .= " cterm=" .a:attr | endif
-  exec s:c
+    let s:c = "highlight! " .a:group ." NONE"
+    if a:fg != ""   | let s:c .= " ctermfg=" .a:fg | endif
+    if a:bg != ""   | let s:c .= " ctermbg=" .a:bg | endif
+    if a:attr != "" | let s:c .= " cterm=" .a:attr | endif
+    exec s:c
 endfunction
 
-" Major vim user interface highlights.
-"          name             foreground  background  attributes
-call s:hi("User1",          s:cont2,    "",         "")
-call s:hi("ColorColumn",    "",         s:bg2,      "")
-call s:hi("Cursor",         s:bg2,      s:cont3,    "")
-call s:hi("lCursor",        s:bg2,      s:cont3,    "")
-call s:hi("CursorLineNr",   s:green,    s:bg1,      "")
-call s:hi("FoldColumn",     s:blue,     s:bg1,      "")
-call s:hi("Folded",         s:cont1,    s:bg1,      "underline")
-call s:hi("EndOfBuffer",    s:bg1,      s:bg1,      "")
-call s:hi("LineNr",         s:cont1,    s:bg1,      "")
-call s:hi("MatchParen",     s:hi2,      s:bg1,      "bold")
-call s:hi("Normal",         s:cont4,    s:bg1,      "")
-call s:hi("Search",         s:yellow,   s:bg1,      "reverse")
-call s:hi("StatusLine",     s:cont4,    s:bg1,      "")
-call s:hi("StatusLineNC",   s:cont1,    s:bg1,      "")
-call s:hi("VertSplit",      s:bg1,      s:bg1,      "")
-call s:hi("Visual",         s:cont1,    s:bg2,      "bold,reverse")
-call s:hi("VisualNOS",      "",         s:bg1,      "bold,reverse")
+" Clear all known highlights and syntax.
+for hl_group in getcompletion('', 'highlight')
+    call s:hi(hl_group, "", "", "")
+endfor
+syntax enable | syntax reset
 
-" Minor vim user interface highlights.
+" Vim user interface highlights.
+" See :highlight for a complete list and current settings.
 "          name             foreground  background  attributes
-call s:hi("Conceal",        s:blue,     "",         "")
-call s:hi("CursorColumn",   "",         s:bg1,      "")
-call s:hi("CursorLine",     "",         "",         "underline")
-call s:hi("Directory",      s:blue,     "",         "")
-call s:hi("DiffAdd",        s:green,    s:bg1,      "")
-call s:hi("DiffChange",     s:yellow,   s:bg1,      "")
-call s:hi("DiffDelete",     s:orange,   s:bg1,      "")
-call s:hi("DiffText",       s:blue,     s:bg1,      "")
+call s:hi("ColorColumn",    "",         s:white,    "")
+call s:hi("Normal",         s:dark,     s:light,    "")
+call s:hi("Folded",         s:grey1,    "",         "")
+call s:hi("FoldedColumn",   s:grey1,    "",         "")
+call s:hi("LineNr",         s:grey1,    "",         "")
+call s:hi("Visual",         s:white,    s:grey1,    "")
+call s:hi("EndOfBuffer",    s:light,    "",         "")
+call s:hi("VertSplit",      s:light,    "",         "")
+call s:hi("MatchParen",     "",         s:grey1,    "bold")
+call s:hi("Search",         "",         "",         "reverse")
 call s:hi("ErrorMsg",       s:orange,   "",         "reverse")
-call s:hi("IncSearch",      s:orange,   "",         "reverse")
-call s:hi("ModeMsg",        s:blue,     "",         "")
+call s:hi("Directory",      s:blue,     "",         "")
 call s:hi("MoreMsg",        s:blue,     "",         "")
-call s:hi("NonText",        s:purple,   "",         "bold")
-call s:hi("Pmenu",          s:cont3,    s:bg1,      "bold,reverse")
-call s:hi("PmenuSel",       s:cont1,    s:hi1,      "bold,reverse")
-call s:hi("PmenuSbar",      s:hi1,      s:cont3,    "bold,reverse")
-call s:hi("PmenuThumb",     s:cont3,    s:bg2,      "bold,reverse")
-call s:hi("Question",       s:cyan,     "",         "bold")
-call s:hi("SignColumn",     "",         s:bg1,      "")
-call s:hi("SpecialKey",     s:purple,   "",         "bold")
-call s:hi("SpellBad",       "",         "",         "undercurl")
-call s:hi("SpellCap",       "",         "",         "undercurl")
-call s:hi("SpellLocal",     "",         "",         "undercurl")
-call s:hi("SpellRare",      "",         "",         "undercurl")
-call s:hi("TabLine",        s:cont3,    s:bg1,      "reverse")
-call s:hi("TabLineFill",    s:cont3,    s:bg1,      "reverse")
-call s:hi("TabLineSel",     s:cont1,    s:hi1,      "bold,reverse,underline")
-call s:hi("Title",          s:orange,   "",         "bold")
-call s:hi("WarningMsg",     s:orange,   "",         "bold")
-call s:hi("WildMenu",       s:hi1,      s:bg1,      "bold,reverse")
-hi! link NvimInternalError ErrorMsg
+call s:hi("Question",       s:blue,     "",         "")
 
-" Common syntax highlights.
-"          name             foreground  background  attributes
-call s:hi("Comment",        s:green,    "",         "")
-call s:hi("Constant",       s:cyan,     "",         "")
-hi! link Boolean    Constant
-hi! link Character  Constant
-hi! link Float      Constant
-hi! link Number     Constant
-hi! link String     Constant
-call s:hi("Error",          s:orange,    s:bg1,     "bold")
-call s:hi("Identifier",     s:cont4,     "",        "none")
-hi! link Function   Identifier
-call s:hi("PreProc",        s:lime,      "",        "")
-hi! link Define     PreProc
-hi! link Include    PreProc
-hi! link Macro      PreProc
-hi! link PreCondit  PreProc
-call s:hi("Special",        s:lime,      "",        "")
-hi! link Debug          Special
-hi! link Delimiter      Special
-hi! link SpecialChar    Special
-hi! link SpecialComment Special
-hi! link Tag            Special
-call s:hi("Statement",      s:hi1,      "",         "")
-hi! link Conditional  Statement
-hi! link Exception    Statement
-hi! link Keyword      Statement
-hi! link Label        Statement
-hi! link Operator     Statement
-hi! link Repeat       Statement
-call s:hi("Todo",           s:orange,   s:bg1,      "bold")
-call s:hi("Type",           s:blue,     "",         "")
-hi! link StorageClass Type
-hi! link Structure    Type
-hi! link TypeDef      Type
-call s:hi("Underlined",     s:magenta,  "",         "")
+" Syntax highlights.
+"          name         foreground  background  attributes
+call s:hi("Comment",    s:green,    "",         "")
+call s:hi("Constant",   s:dark,     "",         "")
+call s:hi("Identifier", s:dark,     "",         "")
+call s:hi("Statement",  s:dark,     "",         "")
+call s:hi("PreProc",    s:blue,     "",         "")
+call s:hi("Type",       s:dark,     "",         "")
+call s:hi("Special",    s:dark,     "",         "")
+call s:hi("Underlined", s:magenta,  "",         "")
+call s:hi("Ignore",     s:orange,   "",         "bold,reverse")
+call s:hi("Error",      s:orange,   "",         "bold")
+call s:hi("Todo",       s:orange,   "",         "bold")
 
-delfunction s:hi        " Cleanup.
+" Cleanup.
+delfunction s:hi

@@ -5,7 +5,20 @@ Most line jumps are better served by searches or paragraph jumps.
 Because of this, seeing line numbers is useful, but relative line numbers is
 useless at best and counterproductive at worst.
 
-ctrl-o  Perform a normal mode command without exiting insert mode.
+IN ORDER OF FREQUENCY OF USE AT TIME OF WRITING
+
+KEY     MNEMONIC        FUNCTION
+C-c     Escape          Exit to normal mode.
+i a     Insert Append   Switch to insert mode before / after cursor.
+o O                     Switch to insert mode on new line below / above cursor.
+
+
+
+
+I:  ctrl-o  Perform a normal mode command without exiting insert mode.
+N:  ctrl-o  Previous cursor history position
+N:  ctrl-i  Next cursor history position
+
 
 UNMAPPED KEYS TO REDUCE RSI ~~~~~~~~~~~~~
 Backspace       Use Control-H instead
@@ -41,3 +54,17 @@ PARAGRAPH NAVIGATION ~~~~~~~~~~~~~~~~~~~~
 PAGE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FILE NAVIGATION ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+MISC
+g C-g       show file stats
+qx          record macro x:w
+
+
+NAVIGATION
+k/j         line up/down
+h/l         character left/right
+b/w         word previous/next
+0/$         line beginning/end
+C-u/C-d     page up/down
+

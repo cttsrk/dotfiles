@@ -1,76 +1,19 @@
-# CTTSRK's terminal colors
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# lives @ github.com/cttsrk/dotfiles
-#
 # Set fancy terminal colors using ANSI escape sequences.
-
-# term = rgb hex      default color     intent          ANSI
-# ===========================================================
-color00="05/15/1f"  # Black ->          background1     30
-color04="09/1e/28"  # Blue ->           background2     34
-color08="23/3c/43"  # bright black ->   content1        90
-color09="4f/68/71"  # bright red ->     content2        91
-color14="71/84/86"  # bright cyan ->    content3        96
-color11="9a/9a/8a"  # bright yellow ->  content4        93
-color07="ea/e4/be"  # White ->          highlight1      37
-color15="ff/f7/e2"  # bright white ->   highlight2      97
-color10="aa/ee/aa"  # bright green ->   lime            92
-color03="bf/9f/40"  # Yellow ->         Yellow          33
-color01="c3/31/00"  # Red ->            orange          31
-color05="cc/19/70"  # Magenta ->        Magenta         35
-color13="57/5c/bb"  # bright magenta -> bright purple   95
-color12="9a/bb/d6"  # bright blue ->    bright blue     94
-color06="5c/d3/a9"  # Cyan ->           Cyan            36
-color02="6c/9f/29"  # Green ->          Green           32
-
-foreground=$color11
-background=$color00
-
-# Build environment-appropriate functions for performing the changes. Yoinked
-# from github.com/chriskempson/base16 .
-if [ -n "$TMUX" ]; then
-    # Tell tmux to pass the escape sequences through. More info:
-    # http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324
-    put_tmplt(){ printf '\033Ptmux;\033\033]4;%d;rgb:%s\033\033\\\033\\' $@; }
-    put_tmplt_var(){ printf '\033Ptmux;\033\033]%d;rgb:%s\033\033\\\033\\' $@; }
-    put_tmplt_custom(){ printf '\033Ptmux;\033\033]%s%s\033\033\\\033\\' $@; }
-elif [ "${TERM%%[-.]*}" = "screen" ]; then
-    # GNU screen (screen, screen-256color, screen-256color-bce)
-    put_tmplt(){ printf '\033P\033]4;%d;rgb:%s\007\033\\' $@; }
-    put_tmplt_var(){ printf '\033P\033]%d;rgb:%s\007\033\\' $@; }
-    put_tmplt_custom(){ printf '\033P\033]%s%s\007\033\\' $@; }
-elif [ "${TERM%%-*}" = "linux" ]; then
-    put_tmplt(){ [ $1 -lt 16 ] && printf "\e]P%x%s" $1 $(echo $2|sed 's/\///g'); }
-    put_tmplt_var(){ true; }
-    put_tmplt_custom(){ true; }
-else
-    put_tmplt(){ printf '\033]4;%d;rgb:%s\033\\' $@; }
-    put_tmplt_var(){ printf '\033]%d;rgb:%s\033\\' $@; }
-    put_tmplt_custom(){ printf '\033]%s%s\033\\' $@; }
-fi
-
-# Let's do it!
-put_tmplt 0  $color00
-put_tmplt 1  $color01
-put_tmplt 2  $color02
-put_tmplt 3  $color03
-put_tmplt 4  $color04
-put_tmplt 5  $color05
-put_tmplt 6  $color06
-put_tmplt 7  $color07
-put_tmplt 8  $color08
-put_tmplt 9  $color09
-put_tmplt 10 $color10
-put_tmplt 11 $color11
-put_tmplt 12 $color12
-put_tmplt 13 $color13
-put_tmplt 14 $color14
-put_tmplt 15 $color15
-put_tmplt_var 10 $foreground
-put_tmplt_var 11 $background
-put_tmplt_custom 12 ";7" # reverse video cursor
-
-# Cleanup.
-unset -f put_tmplt put_tmplt_var put_tmplt_custom foreground background
-unset color00 color01 color02 color03 color04 color05 color06 color07
-unset color08 color09 color10 color11 color12 color13 color14 color15
+printf  '\e]4;0;rgb:08/08/08\e\\'   # black     -> termcolor 232
+printf  '\e]4;1;rgb:dc/32/2f\e\\'   # red       -> solarized red
+printf  '\e]4;2;rgb:5f/af/00\e\\'   # green     -> termcolor  70
+printf  '\e]4;3;rgb:d7/af/00\e\\'   # yellow    -> termcolor 178
+printf  '\e]4;4;rgb:00/5f/af\e\\'   # blue      -> termcolor  25
+printf  '\e]4;5;rgb:87/5f/d7\e\\'   # magenta   -> termcolor  98 (purple)
+printf  '\e]4;6;rgb:00/af/af\e\\'   # cyan      -> termcolor  37
+printf  '\e]4;7;rgb:f4/ee/da\e\\'   # white     -> cttsrk light
+printf  '\e]4;8;rgb:44/44/44\e\\'   # bright black   -> termcolor 238
+printf  '\e]4;9;rgb:d7/5f/00\e\\'   # bright red     -> termcolor 166
+printf '\e]4;10;rgb:6a/d5/65\e\\'   # bright green   -> cttsrk lime
+printf '\e]4;11;rgb:ff/d7/00\e\\'   # bright yellow  -> termcolor 220
+printf '\e]4;12;rgb:00/87/ff\e\\'   # bright blue    -> termcolor  33
+printf '\e]4;13;rgb:d7/00/d7\e\\'   # bright magenta -> termcolor 164
+printf '\e]4;14;rgb:5f/ff/ff\e\\'   # bright cyan    -> termcolor  87
+printf '\e]4;15;rgb:ff/fa/ec\e\\'   # bright white   -> cttsrk white
+printf   '\e]10;rgb:00/2b/36\e\\'   # foreground -> solarized dark
+printf   '\e]11;rgb:ff/fa/ec\e\\'   # background -> cttsrk white
