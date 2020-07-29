@@ -9,8 +9,5 @@ bind Space:magic-space                  # History expansion expansion on space.
 # Use a separate file for aliases.
 if [ -f ~/.dotfiles/bash_aliases ]; then . ~/.dotfiles/bash_aliases; fi
 
-# Customize the terminal colors.
-if [ -f ~/.dotfiles/color_terminal ]; then . ~/.dotfiles/color_terminal; fi
-
 # Set a fancy shell prompt and keep the window title up to date.
 PS1="\[\e]0;\w/\a\]\[\e[32m\]\u@\h \[\e[34m\]\w/\[\e[00m\] "

@@ -17,8 +17,11 @@ if [ -z "$TMPDIR" ]; then               # Make sure we have a TMPDIR.
 fi
 
 # If we're not in a tmux pane, attach to the first available tmux session,
-# cor launch one if none exists.
+# cor launch one if none exists. Also, only set terminal colors before we
+# enter tmux.
 if [ -z "$TMUX" ]; then
+    if [ -f ~/.dotfiles/color_terminal ]; then . ~/.dotfiles/color_terminal; fi
+
     tmux attach || tmux
 fi
 
