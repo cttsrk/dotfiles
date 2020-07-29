@@ -1,7 +1,7 @@
 #!/bin/bash
 # Dirty hacky dotfile installer, nothing fancy.
 
-if [ -f ~/.profile ]; then mv ~/.profile ~/profile.old; fi
+if [ -f ~/.profile ]; then mv ~/.profile ~/.profile.old; fi
 ln -s ~/.dotfiles/profile ~/.profile
 
 
