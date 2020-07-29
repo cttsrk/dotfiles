@@ -18,6 +18,7 @@ set splitright splitbelow
 set foldcolumn=0 numberwidth=6
 set tabstop=4 shiftwidth=4 expandtab autoindent
 set ignorecase smartcase incsearch
+set textwidth=78
 
 " Highlight the first 80 columns.
 let &colorcolumn="".join(range(1,80),",")
@@ -98,6 +99,10 @@ if (&t_Co == "256")
     let s:cyan      = "37"
     let s:lime      = "76"
     let s:magenta   = "164"
+    let s:attn_y    = "220"
+    let s:attn_o    = "215"
+    let s:attn_r    = "203"
+    let s:attn_g    = "112"
 else
     let s:grey1     = "8"
     let s:grey2     = "8"
@@ -142,7 +147,7 @@ call s:hi("LineNr",         s:grey1,    "",         "")
 call s:hi("Visual",         s:white,    s:grey1,    "")
 call s:hi("EndOfBuffer",    s:light,    "",         "")
 call s:hi("VertSplit",      s:light,    "",         "")
-call s:hi("MatchParen",     "",         s:grey1,    "bold")
+call s:hi("MatchParen",     s:black,    s:attn_y,   "bold")
 call s:hi("Search",         "",         "",         "reverse")
 call s:hi("ErrorMsg",       s:orange,   "",         "reverse")
 call s:hi("Directory",      s:blue,     "",         "")
@@ -152,9 +157,9 @@ call s:hi("Question",       s:blue,     "",         "")
 " Syntax highlights.
 "          name         foreground  background  attributes
 call s:hi("Comment",    s:green,    "",         "")
-call s:hi("Constant",   s:dark,     "",         "")
+call s:hi("Constant",   s:green,    "",         "")
 call s:hi("Identifier", s:dark,     "",         "")
-call s:hi("Statement",  s:dark,     "",         "")
+call s:hi("Statement",  s:orange,   "",         "")
 call s:hi("PreProc",    s:blue,     "",         "")
 call s:hi("Type",       s:dark,     "",         "")
 call s:hi("Special",    s:dark,     "",         "")

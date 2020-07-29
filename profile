@@ -19,7 +19,7 @@ fi
 # If we're not in a tmux pane, attach to the first available tmux session,
 # cor launch one if none exists.
 if [ -z "$TMUX" ]; then
-    tmux attach 0|| tmux
+    tmux attach || tmux
 fi
 
 # FUCK YOU APPLE FOR SERIAL
