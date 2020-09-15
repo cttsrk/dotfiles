@@ -48,21 +48,10 @@ nn  <C-q> :q<CR>
 ino <C-q> <Esc>:q<CR>
 vno <C-q> <Esc>:q<CR>
 
-"Trigger InsertLeave event when exiting insert mode with Control-C
-ino <C-c> <Esc>
-
-" Silence Control-C.
-nn <C-c> :<C-c>
-
 " Use space to unhighlight search matches.
 nn <Space> :nohlsearch<CR>:<C-c><Space>
 
-" Unbind keys that encourage suboptimal use patterns ("vim hardmode").
-nn  h           <Nop>
-nn  j           <Nop>
-nn  k           <Nop>
-nn  l           <Nop>
-
+" Update the window title when changing vim buffers.
 function! UpdateTitle()
   let &titlestring="".fnamemodify(expand("%"),":~")
   set title
