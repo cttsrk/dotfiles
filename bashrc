@@ -11,9 +11,7 @@ if [ -f ~/.dotfiles/bash_aliases ]; then . ~/.dotfiles/bash_aliases; fi
 
 # Set a fancy shell prompt and keep the window title up to date.
 if (( EUID != 0 )); then
-    # luser
     PS1="\[\e]0;\w/\a\]\[\e[32m\]\u@\h \[\e[34m\]\w/\[\e[00m\] "
 else
-    # root
     PS1="\[\e]0;\w/\a\]\[\e[31m\]\u@\h \[\e[34m\]\w/\[\e[00m\] "
 fi
