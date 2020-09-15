@@ -2,18 +2,21 @@
 umask 022
 # stty -ixon
 
-if [ -n "$BASH_VERSION" ]; then         # If running BASH.
+# Source bashrc if we're in bash.
+if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.dotfiles/bashrc" ]; then
-	. "$HOME/.dotfiles/bashrc"
+	    . "$HOME/.dotfiles/bashrc"
     fi
 fi
 
-if [ -d "$HOME/bin" ] ; then            # Add ~/bin to PATH if we have it.
+# If we have a ~/bin, add it to PATH.
+if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-if [ -z "$TMPDIR" ]; then               # Make sure we have a TMPDIR.
+# Make sure we have a temp directory.
+if [ -z "$TMPDIR" ]; then
     TMPDIR="/tmp/"
 fi
 
