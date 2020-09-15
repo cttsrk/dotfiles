@@ -1,5 +1,6 @@
 # ~/.profile: executed by the command interpreter for login shells.
 umask 022
+# stty -ixon
 
 if [ -n "$BASH_VERSION" ]; then         # If running BASH.
     # include .bashrc if it exists
@@ -27,3 +28,5 @@ fi
 
 # FUCK YOU APPLE FOR SERIAL
 export BASH_SILENCE_DEPRECATION_WARNING=1
+
+export PATH="$HOME/.cargo/bin:$PATH"

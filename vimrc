@@ -19,6 +19,7 @@ set foldcolumn=0 numberwidth=6
 set tabstop=4 shiftwidth=4 expandtab autoindent
 set ignorecase smartcase incsearch
 set textwidth=78
+set encoding=utf-8
 
 " Highlight the first 80 columns.
 let &colorcolumn="".join(range(1,80),",")
@@ -39,6 +40,14 @@ if (&term == "pcterm" || &term == "win32")
     nn <Char-0x07F> <BS>
 endif
 
+" Misc keybinds
+nn  <C-s> :w<CR>
+ino <C-s> <Esc>:w<CR>a
+vno <C-s> <Esc>:w<CR>
+nn  <C-q> :q<CR>
+ino <C-q> <Esc>:q<CR>
+vno <C-q> <Esc>:q<CR>
+
 "Trigger InsertLeave event when exiting insert mode with Control-C
 ino <C-c> <Esc>
 
@@ -49,28 +58,12 @@ nn <C-c> :<C-c>
 nn <Space> :nohlsearch<CR>:<C-c><Space>
 
 " Unbind keys that encourage suboptimal use patterns ("vim hardmode").
-no  <Home>      <Nop>
-no  <End>       <Nop>
-no  <Insert>    <Nop>
-no  <BS>        <Nop>
-no  <Up>        <Nop>
-no  <Down>      <Nop>
-no  <Left>      <Nop>
-no  <Right>     <Nop>
 nn  h           <Nop>
 nn  j           <Nop>
 nn  k           <Nop>
 nn  l           <Nop>
-no! <Home>      <Nop>
-no! <End>       <Nop>
-no! <Insert>    <Nop>
-no! <BS>        <Nop>
-no! <Up>        <Nop>
-no! <Down>      <Nop>
-no! <Left>      <Nop>
-no! <Right>     <Nop>
+nn  <C-q> :q<CR>
 
-" Set the terminal title to "filename".
 function! UpdateTitle()
   let &titlestring="".fnamemodify(expand("%"),":~")
   set title
