@@ -62,7 +62,6 @@ nn  h           <Nop>
 nn  j           <Nop>
 nn  k           <Nop>
 nn  l           <Nop>
-nn  <C-q> :q<CR>
 
 function! UpdateTitle()
   let &titlestring="".fnamemodify(expand("%"),":~")
@@ -111,6 +110,10 @@ else
     let s:cyan      = "6"
     let s:lime      = "10"
     let s:magenta   = "13"
+    let s:attn_y    = "11"
+    let s:attn_o    = "11"
+    let s:attn_r    = "9"
+    let s:attn_g    = "10"
 endif
 
 " Build an appropriate highlight command. The "NONE" before the variables
