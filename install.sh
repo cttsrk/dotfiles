@@ -1,8 +1,11 @@
 #!/bin/bash
 # Dirty hacky dotfile installer, nothing fancy.
 
-if [ -f ~/.profile ]; then mv ~/.profile ~/.profile.old; fi
-ln -s ~/.dotfiles/profile ~/.profile
+if [ -f ~/.zshrc ]; then mv ~/.zshrc ~/.zshrc.old; fi
+ln -s ~/.dotfiles/zshrc ~/.zshrc
+
+if [ -f ~/.zprofile ]; then mv ~/.zprofile ~/.zprofile.old; fi
+ln -s ~/.dotfiles/zprofile ~/.zprofile
 
 
 if [ -f ~/.tmux.conf ]; then mv ~/.tmux.conf ~/.tmux.conf.old; fi
