@@ -1,135 +1,86 @@
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"                    GENERAL
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ca vconf new ~/.vimrc           " Quick edit this file with :vconf
+ca rev source ~/.vimrc          " Quick reload this file with :rev
 
-""" Don't care to be compatible with vi circa 1976.
-set nocompatible
+set noeb vb t_vb=               " STFU: No terminal blinking
+set t_Co=256                    " Tmux workaround: Force 256-color terminal
+set bg=dark                     " Tmux workaround: Force dark mode
+set ttymouse=xterm2 mouse=a     " Tmux workaround: Enable mouse
 
-set t_Co=256
+set wrapmargin=0 nowrap         " Turn off automatic line wrap
+set textwidth=78                " Width when reflowing text (e.g. `gq`)
+set autoindent smartindent      " Automatic syntax-aware indentation (C style)
+set undofile                    " Persistent unlimited undo
 
-""" Quickly edit and reload this file from anywhere.
-cabbrev vconf new ~/.vimrc
-cabbrev rev source ~/.vimrc
+set expandtab                   " Tabs: Always use spaces instead of '\t'
+set tabstop=4 shiftwidth=4      " Tabs: Use 4 spaces for tab
+set softtabstop=4               " Tabs: Backspace erases 4 spaces at a time
 
-""" Turn off hard and soft line wrap.
-set textwidth=0 wrapmargin=0 nowrap
+set incsearch hlsearch          " Search: Continuously highlight searches
+set ignorecase smartcase        " Search: Ignore case, for small letters only
+nn  <C-c> :noh<CR>:<C-c>        " Search: Ctrl-C discards current highlights
 
-""" Rolodex mode, vertical and horizontal
-set noequalalways winheight=9999 helpheight=9999 winminheight=2
+set noequalalways               " UI: Don't equalize window sizes
+set winheight=99 helpheight=99  " UI: Maximize new windows
 
-""" The final tab solution.
-set tabstop=4 shiftwidth=4 expandtab autoindent
+set numberwidth=5               " UI: Fixed line number width up to 9999 lines
+au  BufEnter * set number       " UI: Line numbers everywhere, including help
+let &cc=join(range(1,78),",")   " UI: Highlight 78 columns (see ColorColumn)
 
-set fillchars=stl:\ ,stlnc:\ 
+set laststatus=2                " UI: Enable statusline always
+set statusline=%33.33(%)        " UI: Statusline left-aligned padding
+set statusline+=%50.50(%f%)     " UI: Statusline right-aligned file name
+set t_ts=]2; t_fs=\\ title  " UI: Enable window title
 
-""" Save unlimited per-file undo history in appdata.
-set undofile
-
-""" Enable mouse
-set ttymouse=xterm2
-set mouse=a
-
-""" STFU
-set noeb vb t_vb=
-
-""" Misc
-set laststatus=1 noruler statusline=%=\ %f\ 
-set hidden
-set scrolloff=3
-set splitright splitbelow
-set foldcolumn=0
-set ignorecase smartcase incsearch
-set encoding=utf-8
-set number numberwidth=5
-
-""" Enable line numbers for all opened files, even help files.
-augroup buffer_switch_settings
-    autocmd!
-    autocmd BufEnter * :set number
-augroup END
-
-" Update the window title when changing vim buffers.
-function! UpdateTitle()
-  let &titlestring='vim  '.expand("%:~")
-  set t_ts=]2;
-  set t_fs=\\
-  set title
-endfunction
-augroup windowtitle
-  autocmd!
-  autocmd BufReadPost,FileReadPost,BufNewFile,BufEnter * call UpdateTitle()
-augroup END
-
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"                    KEYBINDS
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-""" Hit space to unhighlight search matches.
-nn <Space> :nohlsearch<CR>:<C-c><Space>
+""" Update the window title with the compact file name when changing buffers
+au BufEnter * let &titlestring="vim " . expand("%:~")
 
 
 
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"           COLOR THEME / HIGHLIGHTS
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""" Do some work to make highlight and color configuration more painless:
 
-""" Highlight the first 80 columns.
-let &colorcolumn="".join(range(1,80),",")
-" set colorcolumn=80
+""" First create a function for composing a `highlight` vim command from the
+""" supplied parameters. The leading "NONE" clears the target highlight
+""" group's colors without reverting to built-in defaults.
+func s:hl(group, fg, bg, attr)
+    let s:com = "hi! " . a:group . " NONE"
+    if   a:fg   != "" | let s:com .= " ctermfg=" . a:fg   | endif
+    if   a:bg   != "" | let s:com .= " ctermbg=" . a:bg   | endif
+    if   a:attr != "" | let s:com .= " cterm="   . a:attr | endif
+    exec s:com
+endf
 
-""" Force dark mode
-set bg=dark
+""" Then we can easily clear all predefined highlights.
+for w in getcompletion("", "highlight") | call s:hl(w, "", "", "") | endfor
 
-""" Build an appropriate highlight command. The "NONE" before the variables
-" clears the highlight completely without reverting to default.
-function s:hi(group, fg, bg, attr)
-    let s:c = "highlight! " .a:group ." NONE"
-    if a:fg != ""   | let s:c .= " ctermfg=" .a:fg | endif
-    if a:bg != ""   | let s:c .= " ctermbg=" .a:bg | endif
-    if a:attr != "" | let s:c .= " cterm=" .a:attr | endif
-    exec s:c
-endfunction
-
-""" NUKE ALL HIGHLIGHTS
-"for hl_group in getcompletion('', 'highlight')
-"   call s:hi(hl_group, "", "", "")
-"endfor
-
-" Diable bold fonts
-set  t_md=
-    
+""" After that, we pull in highlights from filetype-specific syntaxes.
 syntax enable
-syntax reset
 
-""" Vim UI highlights      foreground  background  attributes
-call s:hi("ColorColumn",      "",         "233",      "")
-" call s:hi("Normal",         s:dark,     s:light,    "")
-" call s:hi("Folded",         s:grey1,    "",         "")
-" call s:hi("FoldedColumn",   s:grey1,    "",         "")
-" call s:hi("FoldColumn",      "",        "red",      "")
-call s:hi("LineNr",           "8",    "",         "")
-" call s:hi("Visual",         s:white,    s:grey1,    "")
-call s:hi("EndOfBuffer",      "black",    "",         "")
-call s:hi("StatusLine",       "14",     "black",    "")
-call s:hi("StatusLineNC",     "8",    "black",    "")
-" call s:hi("VertSplit",      s:light,    "",         "")
-" call s:hi("MatchParen",     s:black,    s:attn_y,   "bold")
-" call s:hi("Search",         "",         "",         "reverse")
-" call s:hi("ErrorMsg",       s:orange,   "",         "reverse")
-" call s:hi("Directory",      s:blue,     "",         "")
-" call s:hi("MoreMsg",        s:blue,     "",         "")
-" call s:hi("Question",       s:blue,     "",         "")
-""" Syntax highlights      foreground  background  attributes
-" call s:hi("Comment",        s:green,    "",         "")
-" call s:hi("Constant",       s:green,    "",         "")
-" call s:hi("Identifier",     s:dark,     "",         "")
-" call s:hi("Statement",      s:orange,   "",         "")
-" call s:hi("PreProc",        s:blue,     "",         "")
-" call s:hi("Type",           s:dark,     "",         "")
-" call s:hi("Special",        s:dark,     "",         "")
-" call s:hi("Underlined",     s:magenta,  "",         "")
-" call s:hi("Ignore",         s:orange,   "",         "bold,reverse")
-" call s:hi("Error",          s:orange,   "",         "bold")
-" call s:hi("Todo",           s:orange,   "",         "bold")
+""" Now we can configure custom highlights in a terse and readable manner:
+"""
+""" UI highlights           foreground  background  styles
+""" ===============================================================
+call s:hl("ColorColumn",    "",         "233",      "")
+" call s:hl("Normal",       "",         "",         "")
+" call s:hl("Folded",       "",         "",         "")
+" call s:hl("FoldedColumn", "",         "",         "")
+" call s:hl("FoldColumn",   "",         "",         "")
+call s:hl("LineNr",         "darkgrey", "",         "")
+call s:hl("Visual",         "",         "darkgrey", "")
+call s:hl("EndOfBuffer",    "black",    "",         "")
+call s:hl("StatusLine",     "cyan",     "",         "")
+call s:hl("StatusLineNC",   "darkgrey", "",         "")
+" call s:hl("VertSplit",    "",         "",         "")
+call s:hl("MatchParen",     "green",    "",         "underline")
+call s:hl("Search",         "green",    "",         "underline")
+" call s:hl("ErrorMsg",     "",         "",         "")
+" call s:hl("Directory",    "",         "",         "")
+" call s:hl("MoreMsg",      "",         "",         "")
+" call s:hl("Question",     "",         "",         "")
 
-delfunction s:hi
+""" The root syntax higlight groups are `Comment`, `Constant`, `Error`,
+""" `Identifier`, `Statement`, `PreProc`, `Type`, `Special`, `Underlined`,
+""" `Ignore` and  `Todo`.
+"""
+""" Syntax highlights       foreground  background  styles
+""" ===============================================================
+call s:hl("Todo",           "red",      "",         "")
